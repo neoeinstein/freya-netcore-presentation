@@ -1,0 +1,13 @@
+.pkg/
+bin/
+obj/
+results/
+temp/
+project.lock.json
+*.user
+*.dg
+.vs/
+.vscode/settings.json
+paket.exe
+packages/
+paket-files/

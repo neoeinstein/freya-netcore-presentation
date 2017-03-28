@@ -1,0 +1,82 @@
+let helloMachine = freyaMachine {
+  // availableMediaTypes MediaType.Text
+  httpVersionSupported true
+
+  methods [GET; HEAD]
+  handleOk sayHello
+}
+
+open Authentication
+
+let isAuthorized = BasicAuth.isAuthorized <| fun (Username u) (Password p) -> freya {
+  match u, p with
+  | "marcus", "test"
+  | "superUser", "superPassword"
+  | "anonymous", _ -> return true
+  | _ -> return false
+}
+
+let superUserOnly = freya {
+  let! user = Authentication.user
+  match user with
+  | (Some (Username "superUser")) -> return true
+  | _ -> return false
+}
+
+let core = freyaMachine {
+  including (basicAuth "demoRealm")
+
+  methods [GET; HEAD; OPTIONS]
+
+  authorized isAuthorized
+}
+
+  including core
+
+  including core
+
+  allowed superUserOnly
+  handleForbidden (Represent.text "Superuser privileges required")
+
+let logoutMachine = freyaMachine {
+  including core
+
+  authorized false
+}
+
+  resource "/logout" logoutMachine
+
+
+let helloName = freya {
+  let! routeName = Freya.Optic.get routeName_
+  let! uO = Authentication.user
+  return
+    match routeName, uO with
+    | Some name, _
+    | None, Some (Username name) -> Some name
+    | _ -> None
+}
+
+let sayHello = freya {
+  let! nameO = helloName
+  let helloStr =
+    match nameO with
+    | Some name -> sprintf "Hello, %s!" name
+    | None -> "Hello, World!"
+  return Represent.text helloStr
+}
+
+  cors
+  corsMethods [GET; HEAD; OPTIONS]
+  corsHeaders ["Server"]
+  corsOrigins (SerializedOrigin.parse "http://example.com")
+  corsMaxAge (60*60*24)
+
+let helloEtag = freya {
+  let! nameO = helloName
+  return EntityTag.Weak <| string (hash nameO)
+}
+
+  Freya.memo
+
+  entityTag helloEtag
