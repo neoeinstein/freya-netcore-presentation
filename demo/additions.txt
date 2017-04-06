@@ -8,6 +8,28 @@ let helloMachine = freyaMachine {
 
 ==============================
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 open Authentication
 
 let isAuthorized = BasicAuth.isAuthorized <| fun (Username u) (Password p) -> freya {
@@ -49,6 +71,27 @@ let logoutMachine = freyaMachine {
   resource "/logout" logoutMachine
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ========================================================
 
 let helloName = freya {
@@ -70,6 +113,27 @@ let sayHello = freya {
   return Represent.text helloStr
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ========================================================
 
   cors
@@ -77,6 +141,27 @@ let sayHello = freya {
   corsHeaders ["Server"]
   corsOrigins (SerializedOrigin.parse "http://example.com")
   corsMaxAge (60*60*24)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ========================================================
 
