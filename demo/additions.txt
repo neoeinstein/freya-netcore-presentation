@@ -6,6 +6,8 @@ let helloMachine = freyaMachine {
   handleOk sayHello
 }
 
+==============================
+
 open Authentication
 
 let isAuthorized = BasicAuth.isAuthorized <| fun (Username u) (Password p) -> freya {
@@ -47,6 +49,8 @@ let logoutMachine = freyaMachine {
   resource "/logout" logoutMachine
 
 
+========================================================
+
 let helloName = freya {
   let! routeName = Freya.Optic.get routeName_
   let! uO = Authentication.user
@@ -66,11 +70,15 @@ let sayHello = freya {
   return Represent.text helloStr
 }
 
+========================================================
+
   cors
   corsMethods [GET; HEAD; OPTIONS]
   corsHeaders ["Server"]
   corsOrigins (SerializedOrigin.parse "http://example.com")
   corsMaxAge (60*60*24)
+
+========================================================
 
 let helloEtag = freya {
   let! nameO = helloName
