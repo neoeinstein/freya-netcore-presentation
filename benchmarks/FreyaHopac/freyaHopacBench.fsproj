@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <ServerGarbageCollection>true</ServerGarbageCollection>
-    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
     <DefineConstants>$(DefineConstants);HOPAC</DefineConstants>
   </PropertyGroup>
 
